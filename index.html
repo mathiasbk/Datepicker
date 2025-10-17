@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="src/datepicker.js"></script>
+        <link rel="stylesheet" href="src/style.css">
+    </head>
+    <body>
+        <div id="picker">
+
+            <!-- date over canvas -->
+            <div id="date-top" class="date-row">
+                <span>Selected date:</span>
+                <span id="selecteddateTop" class="selecteddate"></span>
+            </div>
+
+            <!-- canvas -->
+            <canvas id="container" width="800" height="400">hei</canvas>
+
+            <!-- knapper under canvas -->
+            <div id="buttons">
+                <button id="startBtn" type="button" onclick="picker.start()">Start</button>
+                <button id="stopBtn" type="button" onclick="picker.stop()">Stop</button>
+            </div>
+
+            <!-- date under canvas -->
+            <div id="date-bottom" class="date-row">
+                <span>Selected date:</span>
+                <span id="selecteddate" class="selecteddate"></span>
+            </div>
+
+        </div>
+
+        <script>
+            let picker;
+            const element = document.getElementById("container");
+            const dateoutput = document.getElementById("selecteddate");
+            document.addEventListener("DOMContentLoaded", function() {
+                picker = new Datepicker(element, dateoutput);
+            });
+        </script>
+    </body>
+</html>
