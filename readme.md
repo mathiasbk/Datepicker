@@ -1,4 +1,8 @@
 # Datetimepicker
 
 Currently work in progress.
-This is a datetimepicker as a 2D game
+
+
+## Demo
+
+Demo can be found here. [text](https://mathiasbk.github.io/Datepicker/example.html)
