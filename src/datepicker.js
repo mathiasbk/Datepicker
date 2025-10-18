@@ -1,4 +1,4 @@
-class Datepicker
+export default class Datepicker
 {
     canvas;
     ctx;
@@ -8,9 +8,10 @@ class Datepicker
     frame = 0;
     gamespeed = 1.5;
     dateCouter = 1;
-    debug = true;
+    debug = false;
+    currentSelector = "day";
 
-    constructor(canvas, dateoutput)
+    constructor(canvas, dateoutput, options = {})
     {
         console.log("picker initialized");
         this.canvas = canvas;
@@ -22,6 +23,7 @@ class Datepicker
 
         this.drawPlayer();
         this.draw();
+        this.onDateSelected = options.onDateSelected || null;
     }
 
     sprite = {
@@ -77,8 +79,23 @@ class Datepicker
         {
             if(this.checkCollision(this.player, obstacle) && obstacle.collided!=true)
             {
-                alert("Collision!");
                 obstacle.collided = true;
+                this.setDate(obstacle.number);
+                this.obstacles = [];
+                this.dateCouter = 1;
+                if(this.currentSelector == "day")
+                {
+                    this.currentSelector = "month";
+                }
+                else if(this.currentSelector == "month")
+                {
+                    this.currentSelector = "year";
+                }
+                else if(this.currentSelector == "year")
+                {
+                    this.stop();
+                    this.canvas.remove();
+                }
             }
         }
 
@@ -156,9 +173,9 @@ class Datepicker
                 obstacle.x + obstacle.w / 2,
                 obstacle.y + obstacle.h / 2
             );
-            //draw
 
         }
+
         if(this.debug)
         {
             this.ctx.save();
@@ -185,8 +202,14 @@ class Datepicker
     stop()
     {
         this.started = false;
+        this.canvas.remove
     }
 
-    addDate
+    setDate(number) {
+
+        if (this.canvas) {
+            this.canvas.dispatchEvent(new CustomEvent('date-selected', { detail: { type:this.currentSelector, date: number } }));
+        }
+    }
 
 }
