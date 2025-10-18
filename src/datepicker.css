@@ -1,0 +1,41 @@
+.Pickerwindow
+{
+    position: absolute;
+    top:540px;
+    width: 350px;
+    height: 300px;
+    z-index: 10;
+    background-color: white;
+    border:1px solid lightgray;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+  .date-container {
+    position: relative;
+  }
+
+  .date-input {
+    width: 180px;
+    padding: 10px 35px 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background: white;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .date-input:hover {
+    border-color: #888;
+  }
+
+  .calendar-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 18px;
+    color: #666;
+  }

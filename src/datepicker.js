@@ -13,7 +13,6 @@ export default class Datepicker
 
     constructor(canvas, dateoutput, options = {})
     {
-        console.log("picker initialized");
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
         this.sheet = new Image();

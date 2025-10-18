@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Datepicker</title>
+
+    <link rel="stylesheet" href="example.css">
+    <script type="module" src="src/main.js"></script>
+    <link rel="stylesheet" href="src/datepicker.css">
+</head>
+<body>
+    <main class="page">
+        <section id="picker" class="card">
+            <h1>Example select birthdate</h1>
+            <p class="hint">Click the field below to open the datepicker.</p>
+
+            <form id="demoForm" class="simple-form" novalidate>
+                <label>
+                    Name
+                    <input type="text" name="name" placeholder="Your name" />
+                </label>
+
+                <label>
+                    Birthdate
+                    <div id="datepickerelement" data-datepicker aria-haspopup="dialog" role="button"></div>
+                    <input type="hidden" name="birthdate" id="birthdateHidden" />
+                </label>
+
+            </form>
+        </section>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById('datepickerelement');
+        FlappyPicker.init(el);
+    });
+    </script>
+</body>
+</html>
