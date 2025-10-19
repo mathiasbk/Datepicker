@@ -5,8 +5,8 @@ export default class Datepicker
     player;
     obstacles = [];
     started = false;
-    completed = false;         // add this field
-    completedMessage = "";     // add this field
+    completed = false;
+    completedMessage = "";
     frame = 0;
     gamespeed = 1;
     dateCouter = 0;
