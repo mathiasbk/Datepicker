@@ -3,9 +3,9 @@ import DatePicker from "./datepicker.js";
 export default class FlappyPicker {
 
     open = false;
-    day = 0;
-    month = 0;
-    year = 0;
+    day = [];
+    month = [];
+    year = [];
 
     constructor(element)
     {
@@ -60,19 +60,32 @@ export default class FlappyPicker {
         });
     }
 
-    createPickerWindow()
-    {
+    createPickerWindow() {
         this.canvas = document.createElement("canvas");
         this.canvas.classList.add("Pickerwindow");
-        this.el.after(this.canvas);
+
+        document.body.appendChild(this.canvas);
+
+        const rect = this.el.getBoundingClientRect();
+
+        this.canvas.style.position = "absolute";
+        this.canvas.style.top = `${rect.bottom + window.scrollY}px`;
+        this.canvas.style.left = `${rect.left + window.scrollX}px`;
+        this.canvas.style.zIndex = "9999";
 
         this.dp = new DatePicker(this.canvas, this.el);
         this.dp.start();
 
-        this.canvas.addEventListener('date-selected', (e) =>
-        {
+        //Event when a number is hit
+        this.canvas.addEventListener('date-selected', (e) => {
             this.handleDateChange(e.detail.type, e.detail.date);
         });
+
+        this._boundOnDocClick = (e) => {
+            if (!this.canvas.contains(e.target) && !this.el.contains(e.target)) {
+                this.closePicker();
+            }
+        };
         document.addEventListener("mousedown", this._boundOnDocClick);
     }
     closePicker()
@@ -97,23 +110,36 @@ export default class FlappyPicker {
 
     handleDateChange(type, number)
     {
-        console.log("type: " + type + " number: " + number);
-        if (type === 'day') {
-            this.day = String(number).padStart(2, '0');
-        } else if (type === 'month') {
-            this.month = String(number).padStart(2, '0');
-        } else if (type === 'year') {
-            this.year = String(number).padStart(4, '0');
+        if(this.year.length==3)
+        {
+            this.year.push(number);
+            this.dp.gameCompleted();
+            //this.dp.stop();
+            //this.canvas.remove();
+            this.displaydate();
+            return;
+        }
+        if(this.day.length<2)
+        {
+            this.day.push(number);
+        }
+        else if(this.day.length==2 && this.month.length<2)
+        {
+            this.month.push(number);
+        }
+        else if(this.day.length==2 && this.month.length==2 && this.year.length<=4)
+        {
+            this.year.push(number);
         }
 
-    this.displaydate();
+        this.displaydate();
     }
 
     displaydate()
     {
-        const day = String(this.day).padStart(2, '0');
-        const month = String(this.month).padStart(2, '0');
-        const year = String(this.year).padStart(4, '0');
+        const day = this.day.join('');
+        const month = this.month.join('');
+        const year = this.year.join('');
 
         this.inputField.value = `${day}/${month}/${year}`;
     }

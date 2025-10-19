@@ -5,9 +5,11 @@ export default class Datepicker
     player;
     obstacles = [];
     started = false;
+    completed = false;         // add this field
+    completedMessage = "";     // add this field
     frame = 0;
-    gamespeed = 1.5;
-    dateCouter = 1;
+    gamespeed = 1;
+    dateCouter = 0;
     debug = false;
     currentSelector = "day";
 
@@ -73,6 +75,8 @@ export default class Datepicker
 
     update()
     {
+        if (this.completed) return;
+
         //Check for collision
         for(const obstacle of this.obstacles)
         {
@@ -81,25 +85,15 @@ export default class Datepicker
                 obstacle.collided = true;
                 this.setDate(obstacle.number);
                 this.obstacles = [];
-                this.dateCouter = 1;
-                if(this.currentSelector == "day")
-                {
-                    this.currentSelector = "month";
-                }
-                else if(this.currentSelector == "month")
-                {
-                    this.currentSelector = "year";
-                }
-                else if(this.currentSelector == "year")
-                {
-                    this.stop();
-                    this.canvas.remove();
-                }
+                this.dateCouter = 0;
             }
         }
 
         //add obstacle
-        if (this.frame % 150 === 0) {
+        if ((this.frame % 150)/(this.gamespeed*10) === 0) {
+            if(this.obstacles[9])
+            { this.obstacles = []; this.dateCouter = 0;}
+
             const top = Math.random() < 0.5;
 
 
@@ -131,6 +125,8 @@ export default class Datepicker
     draw()
     {
         if (!this.ctx) return;
+
+        //Draw items
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         
@@ -174,6 +170,17 @@ export default class Datepicker
             );
 
         }
+        //When completed
+        if (this.completed) {
+            this.ctx.fillStyle = "rgba(0,0,0,0.45)";
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+            this.ctx.font = "28px Arial";
+            this.ctx.fillStyle = "#fff";
+            this.ctx.textAlign = "center";
+            this.ctx.textBaseline = "middle";
+            this.ctx.fillText(this.completedMessage || "Date selected!", this.canvas.width / 2, this.canvas.height / 2);
+        }
 
         if(this.debug)
         {
@@ -201,7 +208,7 @@ export default class Datepicker
     stop()
     {
         this.started = false;
-        this.canvas.remove
+        //this.canvas.remove
     }
 
     setDate(number) {
@@ -209,6 +216,19 @@ export default class Datepicker
         if (this.canvas) {
             this.canvas.dispatchEvent(new CustomEvent('date-selected', { detail: { type:this.currentSelector, date: number } }));
         }
+    }
+
+    gameCompleted()
+    {
+
+        this.completed = true;
+        this.completedMessage = "Date Selected!";
+
+
+        setTimeout(() => {
+            this.stop();
+            if (this.canvas && this.canvas.parentNode) this.canvas.remove();
+        }, 3000);
     }
 
 }
