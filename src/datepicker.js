@@ -25,6 +25,8 @@ export default class Datepicker
         this.drawPlayer();
         this.draw();
         this.onDateSelected = options.onDateSelected || null;
+
+        this._boundOnTouchMove = (typeof this.onTouchMove === "function") ? this.onTouchMove.bind(this) : null;
     }
 
     sprite = {
@@ -36,6 +38,14 @@ export default class Datepicker
     start()
     {
         this.started = true;
+
+        //Bind touch event
+        if (this._boundOnTouchMove) {
+            const target = this.canvas || document;
+            target.addEventListener("touchmove", this._boundOnTouchMove, { passive: false });
+            this._touchTarget = target;
+        }
+
         document.addEventListener("keydown", e => {
             if(e.code === "ArrowUp")
             {
@@ -208,6 +218,11 @@ export default class Datepicker
     stop()
     {
         this.started = false;
+        // remove touch listener if attached
+        if (this._boundOnTouchMove && this._touchTarget) {
+            this._touchTarget.removeEventListener("touchmove", this._boundOnTouchMove);
+            this._touchTarget = null;
+        }
         //this.canvas.remove
     }
 
@@ -229,6 +244,31 @@ export default class Datepicker
             this.stop();
             if (this.canvas && this.canvas.parentNode) this.canvas.remove();
         }, 3000);
+    }
+
+    onTouchMove(e)
+    {
+        if (e && e.cancelable) e.preventDefault();
+
+        const touch = e && e.touches && e.touches[0];
+        if (!touch) return;
+
+
+        const canvas = this.canvas || (touch.target && touch.target.closest && touch.target.closest('canvas'));
+        if (!canvas) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const cssY = touch.clientY - rect.top;
+
+
+        const scaleY = canvas.height / rect.height;
+        const canvasY = cssY * scaleY;
+
+
+        const clampedY = Math.max(0, Math.min(canvas.height, canvasY));
+
+        this.player.y = clampedY;
+
     }
 
 }

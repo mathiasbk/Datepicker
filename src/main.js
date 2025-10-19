@@ -11,6 +11,7 @@ export default class FlappyPicker {
     {
         this.el = element;
         this._boundOnDocClick = this._onDocumentClick.bind(this);
+
         this.init();
     }
 
@@ -26,6 +27,7 @@ export default class FlappyPicker {
                 this.closePicker();
             }
         });
+
     }
     static init(el) {
         return new FlappyPicker(el);
@@ -72,6 +74,7 @@ export default class FlappyPicker {
         this.canvas.style.top = `${rect.bottom + window.scrollY}px`;
         this.canvas.style.left = `${rect.left + window.scrollX}px`;
         this.canvas.style.zIndex = "9999";
+        this.canvas.style.maxWidth = "80%";
 
         this.dp = new DatePicker(this.canvas, this.el);
         this.dp.start();
@@ -143,6 +146,7 @@ export default class FlappyPicker {
 
         this.inputField.value = `${day}/${month}/${year}`;
     }
+
 };
 
 window.FlappyPicker = FlappyPicker;
