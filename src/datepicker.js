@@ -99,10 +99,16 @@ export default class Datepicker
             }
         }
 
+        
+        //Reset when 9 hits end of screen.
+        if(this.obstacles[9] && this.obstacles[9].x == 0) 
+        { 
+            this.obstacles = []; this.dateCouter = 0;
+        }
+
         //add obstacle
-        if ((this.frame % 150)/(this.gamespeed*10) === 0) {
-            if(this.obstacles[9])
-            { this.obstacles = []; this.dateCouter = 0;}
+        if ((this.frame % 150)/(this.gamespeed*10) === 0 && this.obstacles.length<=9)  {
+
 
             const top = Math.random() < 0.5;
 
@@ -147,6 +153,7 @@ export default class Datepicker
             0, 0, this.canvas.width, this.canvas.height 
         );
         
+        //draw player
         const s = this.sprite.player;
         if (this.imageLoaded) {
             this.ctx.drawImage(
@@ -155,7 +162,7 @@ export default class Datepicker
                 this.player.x, this.player.y, this.player.w, this.player.h
             );
         } else {
-            this.ctx.fillStyle = "red";
+            this.ctx.fillStyle = "gray";
             this.ctx.fillRect(this.player.x, this.player.y, this.player.w, this.player.h);
         }
         
@@ -192,6 +199,7 @@ export default class Datepicker
             this.ctx.fillText(this.completedMessage || "Date selected!", this.canvas.width / 2, this.canvas.height / 2);
         }
 
+        //Shows collision boxes for debug
         if(this.debug)
         {
             this.ctx.save();
@@ -204,7 +212,6 @@ export default class Datepicker
             }
             this.ctx.restore();
             }
-
     }
 
     checkCollision(a, b) {
